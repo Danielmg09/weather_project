@@ -13,10 +13,10 @@ import java.net.Socket;
 
 public class Server {
 
-    ServerSocket serversocket = null;
-    Socket socket = null;
-    DataInputStream dis = null;
-    DataOutputStream dos = null;
+    ServerSocket serversocket;
+    Socket socket;
+    DataInputStream dis;
+    DataOutputStream dos;
 
 
     public void serverInit() {
@@ -80,6 +80,7 @@ public class Server {
         server.serverInit();
 
         while (true) {
+
             server.socketOpen();
 
             String coordinates = server.getResponse();
@@ -90,11 +91,9 @@ public class Server {
 
             server.sendRequest(openinfo.toMessage());
 
-            server.close();
-
-
         }
 
+        //server.close();
 
 
 
