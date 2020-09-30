@@ -88,7 +88,7 @@ public class Server extends Thread{
         return openinfo;
     }
 
-    public void start(){
+/*    public void start(){
         while(true){
             System.out.println("Listening...");
 
@@ -109,6 +109,39 @@ public class Server extends Thread{
             close();
 
         }
+    }
+*/
+
+
+    public void startserver(){
+
+        while(true){
+            try {
+                System.out.println("Listening...");
+                socket = serversocket.accept();
+
+                ServerThread serverthread = new ServerThread(socket);
+                serverthread.start();
+                //String coordinates = getRequest();
+                //Openweather openinfo = getOpenweatherInfo(coordinates);
+                //sendResponse(openinfo.toMessage());
+                //close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+
+
+
+
+
+
+
+
+
 
     }
 
