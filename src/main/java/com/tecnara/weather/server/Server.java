@@ -90,23 +90,17 @@ public class Server {
 
     public void start(){
         while(true){
-            try {
-                socket = serversocket.accept();
-                dis = new DataInputStream(socket.getInputStream());
-                dos = new DataOutputStream(socket.getOutputStream());
-                String coordinates = getResponse();
-                System.out.println("Coordinates received");
+            System.out.println("Listening...");
 
-                Coordinates coord = Utils.parseCoordinates(coordinates);
-                Openweather openinfo = OpenWeatherServices.getCurrentMeteo(coord);
+            socketOpen();
 
-                sendRequest(openinfo.toMessage());
-                close();
+            String coordinates = getResponse();
 
+            Openweather openinfo = jsonToClass(coordinates);
 
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            sendRequest(openinfo.toMessage());
+
+            close();
 
         }
 
