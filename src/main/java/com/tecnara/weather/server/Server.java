@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server extends Thread{
 
     ServerSocket serversocket;
     Socket socket;
@@ -50,7 +50,7 @@ public class Server {
         }
     }
 
-    public void sendRequest(String SendMsg) {
+    public void sendResponse(String SendMsg) {
         try {
             dos.writeUTF(SendMsg);
         } catch (IOException e) {
@@ -58,7 +58,7 @@ public class Server {
         }
     }
 
-    public String getResponse() {
+    public String getRequest() {
         try {
             String response = dis.readUTF();
             return response;
@@ -82,7 +82,7 @@ public class Server {
 
     }
 
-    public Openweather jsonToClass (String coordinates){
+    public Openweather getOpenweatherInfo(String coordinates){
         Coordinates coord = Utils.parseCoordinates(coordinates);
         Openweather openinfo = OpenWeatherServices.getCurrentMeteo(coord);
         return openinfo;
@@ -94,17 +94,30 @@ public class Server {
 
             socketOpen();
 
-            String coordinates = getResponse();
+            try {
+                this.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-            Openweather openinfo = jsonToClass(coordinates);
+            String coordinates = getRequest();
 
-            sendRequest(openinfo.toMessage());
+            Openweather openinfo = getOpenweatherInfo(coordinates);
+
+            sendResponse(openinfo.toMessage());
 
             close();
 
         }
 
+    }
 
+    public void retard(int time){
+        try {
+            sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }
