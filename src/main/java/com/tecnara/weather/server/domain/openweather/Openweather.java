@@ -1,5 +1,7 @@
 package com.tecnara.weather.server.domain.openweather;
 
+import com.tecnara.weather.server.utils.Utils;
+
 import java.util.List;
 
 public class Openweather {
@@ -46,7 +48,7 @@ public class Openweather {
         sb.append("Location: ");
         sb.append(this.name).append("\nMain weather: ").append(weather.get(0).getMain());
         sb.append(", ").append(this.weather.get(0).getDescription());
-        sb.append("\nTemperature: ").append(this.main.getTemp());
+        sb.append("\nTemperature: ").append(Utils.kelvinToCelsius(this.main.getTemp()));
         sb.append(",\nHumidity: ").append(this.main.getHumidity());
         sb.append("\nWind speed: ").append(this.wind.getSpeed());
         return sb.toString();

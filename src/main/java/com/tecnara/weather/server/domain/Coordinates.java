@@ -28,7 +28,7 @@ public class Coordinates {
     @Override
     public boolean equals(Object object){
         if (object.getClass().equals(Coordinates.class)){
-            Coordinates c = (Coordinates)object;
+            Coordinates c = (Coordinates) object;
             if (this.lat == c.lat && this.lon == c.lon){
                 return true;
             }

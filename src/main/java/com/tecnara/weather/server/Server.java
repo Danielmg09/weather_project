@@ -18,6 +18,15 @@ public class Server {
     DataInputStream dis;
     DataOutputStream dos;
 
+    public Server(){
+        try {
+            serversocket = new ServerSocket(3333);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void serverInit() {
         try {
@@ -73,29 +82,35 @@ public class Server {
 
     }
 
+    public Openweather jsonToClass (String coordinates){
+        Coordinates coord = Utils.parseCoordinates(coordinates);
+        Openweather openinfo = OpenWeatherServices.getCurrentMeteo(coord);
+        return openinfo;
+    }
 
-    public static void main(String[] args) {
+    public void start(){
+        while(true){
+            try {
+                socket = serversocket.accept();
+                dis = new DataInputStream(socket.getInputStream());
+                dos = new DataOutputStream(socket.getOutputStream());
+                String coordinates = getResponse();
+                System.out.println("Coordinates received");
 
-        Server server = new Server();
-        server.serverInit();
+                Coordinates coord = Utils.parseCoordinates(coordinates);
+                Openweather openinfo = OpenWeatherServices.getCurrentMeteo(coord);
 
-        while (true) {
+                sendRequest(openinfo.toMessage());
+                close();
 
-            server.socketOpen();
 
-            String coordinates = server.getResponse();
-            System.out.println("Coordinates received");
-
-            Coordinates coord = Utils.parseCoordinates(coordinates);
-            Openweather openinfo = OpenWeatherServices.getCurrentMeteo(coord);
-
-            server.sendRequest(openinfo.toMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
 
-        //server.close();
-
-
 
     }
+
 }
